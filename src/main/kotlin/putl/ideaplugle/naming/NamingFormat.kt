@@ -1,4 +1,4 @@
-package badgertech.putl.ideaplugle.naming
+package putl.ideaplugle.naming
 
 /**
  * 命名格式枚举

@@ -1,7 +1,7 @@
-package badgertech.putl.ideaplugle.ai
+package putl.ideaplugle.ai
 
-import badgertech.putl.ideaplugle.naming.NamingFormat
-import badgertech.putl.ideaplugle.settings.NamingPluginSettings
+import putl.ideaplugle.naming.NamingFormat
+import putl.ideaplugle.settings.NamingPluginSettings
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager

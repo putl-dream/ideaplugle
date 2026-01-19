@@ -1,6 +1,6 @@
-package badgertech.putl.ideaplugle.settings
+package putl.ideaplugle.settings
 
-import badgertech.putl.ideaplugle.naming.NamingFormat
+import putl.ideaplugle.naming.NamingFormat
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State

@@ -1,9 +1,9 @@
-package badgertech.putl.ideaplugle.actions
+package putl.ideaplugle.actions
 
-import badgertech.putl.ideaplugle.ai.NamingAIService
-import badgertech.putl.ideaplugle.naming.NamingFormat
-import badgertech.putl.ideaplugle.settings.NamingPluginSettings
-import badgertech.putl.ideaplugle.ui.popup.NameSelectionPopup
+import putl.ideaplugle.ai.NamingAIService
+import putl.ideaplugle.naming.NamingFormat
+import putl.ideaplugle.settings.NamingPluginSettings
+import putl.ideaplugle.ui.popup.NameSelectionPopup
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent

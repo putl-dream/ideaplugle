@@ -1,14 +1,14 @@
 <!-- Plugin Configuration File: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN, cannot be changed between the plugin versions. -->
-    <id>badgertech.putl.ideaplugle</id>
+    <id>putl.ideaplugle</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
     <name>AI Naming Assistant</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor>BadgerTech</vendor>
+    <vendor>PUTL</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-description -->
@@ -31,8 +31,8 @@
         <!-- 配置面板 -->
         <projectConfigurable
                 parentId="tools"
-                instance="badgertech.putl.ideaplugle.settings.NamingPluginConfigurable"
-                id="badgertech.putl.ideaplugle.settings"
+                instance="putl.ideaplugle.settings.NamingPluginConfigurable"
+                id="putl.ideaplugle.settings"
                 displayName="AI起名助手"/>
     </extensions>
 
@@ -45,14 +45,14 @@
         <toolWindow
                 id="NamingHelper"
                 anchor="right"
-                factoryClass="badgertech.putl.ideaplugle.IdeaplugleToolWindowFactory"
+                factoryClass="putl.ideaplugle.IdeaplugleToolWindowFactory"
                 icon="/icons/plugin.svg"/>
     </extensions>
 
     <!-- Actions -->
     <actions>
-        <action id="badgertech.putl.ideaplugle.GenerateNameAction"
-                class="badgertech.putl.ideaplugle.actions.GenerateNameAction"
+        <action id="putl.ideaplugle.GenerateNameAction"
+                class="putl.ideaplugle.actions.GenerateNameAction"
                 text="AI生成变量名"
                 description="根据选中的描述生成变量名">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="EditorCopy"/>

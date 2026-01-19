@@ -5,8 +5,8 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.10.2"
 }
 
-group = "badgertech.putl"
-version = "1.0-SNAPSHOT"
+group = "putl"
+version = "1.1"
 
 repositories {
     mavenCentral()

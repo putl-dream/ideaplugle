@@ -1,6 +1,6 @@
-package badgertech.putl.ideaplugle
+package putl.ideaplugle
 
-import badgertech.putl.ideaplugle.ui.naming.NamingPanel
+import putl.ideaplugle.ui.naming.NamingPanel
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory

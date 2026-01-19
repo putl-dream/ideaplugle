@@ -1,4 +1,4 @@
-package badgertech.putl.ideaplugle.ui.popup
+package putl.ideaplugle.ui.popup
 
 import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.openapi.ui.popup.ListPopup

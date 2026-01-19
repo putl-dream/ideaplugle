@@ -1,4 +1,4 @@
-package badgertech.putl.ideaplugle.settings
+package putl.ideaplugle.settings
 
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.project.Project

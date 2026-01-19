@@ -1,9 +1,9 @@
-package badgertech.putl.ideaplugle.ui.naming
+package putl.ideaplugle.ui.naming
 
-import badgertech.putl.ideaplugle.ai.NamingAIService
-import badgertech.putl.ideaplugle.naming.NamingFormat
-import badgertech.putl.ideaplugle.settings.NamingPluginConfigurable
-import badgertech.putl.ideaplugle.settings.NamingPluginSettings
+import putl.ideaplugle.ai.NamingAIService
+import putl.ideaplugle.naming.NamingFormat
+import putl.ideaplugle.settings.NamingPluginConfigurable
+import putl.ideaplugle.settings.NamingPluginSettings
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
