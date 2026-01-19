@@ -38,4 +38,8 @@ class NameSelectionPopup(
     fun show(location: RelativePoint) {
         popup.show(location)
     }
+
+    fun showInBestPositionFor(editor: com.intellij.openapi.editor.Editor) {
+        popup.showInBestPositionFor(editor)
+    }
 }

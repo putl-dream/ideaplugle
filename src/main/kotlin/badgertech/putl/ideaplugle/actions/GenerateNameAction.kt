@@ -8,15 +8,13 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.ui.popup.JBPopupFactory
-import com.intellij.ui.awt.RelativePoint
 import com.intellij.ui.JBColor
-import java.awt.Component
-import java.awt.Point
 import javax.swing.JLabel
 
 /**
@@ -62,14 +60,14 @@ class GenerateNameAction : AnAction() {
                         com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                             loadingPopup?.cancel()
                             if (names.isNotEmpty()) {
-                                showNameSelectionPopup(editor.contentComponent, names)
+                                showNameSelectionPopup(editor, names)
                             }
                         }
                     },
                     onError = { error ->
                         com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
                             loadingPopup?.cancel()
-                            showErrorMessage(editor.contentComponent, error)
+                            showErrorMessage(editor, error)
                         }
                     }
                 )
@@ -77,18 +75,12 @@ class GenerateNameAction : AnAction() {
         })
     }
 
-    private fun showNameSelectionPopup(component: Component, names: List<String>) {
+    private fun showNameSelectionPopup(editor: Editor, names: List<String>) {
         val popup = NameSelectionPopup(names) { selectedName ->
             copyToClipboard(selectedName)
         }
 
-        val point = getBestPopupLocation(component)
-        popup.show(RelativePoint.fromScreen(point))
-    }
-
-    private fun getBestPopupLocation(component: Component): Point {
-        val locationOnScreen = component.locationOnScreen
-        return Point(locationOnScreen.x + 100, locationOnScreen.y + 100)
+        popup.showInBestPositionFor(editor)
     }
 
     private fun copyToClipboard(text: String) {
@@ -97,9 +89,9 @@ class GenerateNameAction : AnAction() {
         clipboard.setContents(stringSelection, null)
     }
 
-    private fun showErrorMessage(component: Component, message: String) {
+    private fun showErrorMessage(editor: Editor, message: String) {
         JBPopupFactory.getInstance()
             .createMessage(message)
-            .show(RelativePoint.fromScreen(getBestPopupLocation(component)))
+            .showInBestPositionFor(editor)
     }
 }

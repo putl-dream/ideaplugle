@@ -5,16 +5,16 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-name -->
-    <name>AI起名助手</name>
+    <name>AI Naming Assistant</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor url="https://www.yourcompany.com">BadgerTech</vendor>
+    <vendor>BadgerTech</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html#plugin-description -->
     <description><![CDATA[
-        AI驱动的智能变量起名助手。支持多种命名格式（小驼峰、大驼峰、下划线等），根据描述自动生成规范的变量名。<br>
-        <em>使用OpenAI兼容API</em>
+        An intelligent AI-powered variable naming assistant. Supports multiple naming formats (camelCase, PascalCase, snake_case, etc.) and automatically generates standardized variable names based on descriptions.<br>
+        <em>Uses OpenAI compatible API</em>
     ]]></description>
 
     <!-- Product and plugin compatibility requirements.
