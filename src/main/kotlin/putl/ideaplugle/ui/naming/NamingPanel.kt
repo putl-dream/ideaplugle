@@ -1,6 +1,7 @@
 package putl.ideaplugle.ui.naming
 
 import putl.ideaplugle.ai.NamingAIService
+import putl.ideaplugle.editor.EditorTextInserter
 import putl.ideaplugle.naming.NamingFormat
 import putl.ideaplugle.settings.NamingPluginConfigurable
 import putl.ideaplugle.settings.NamingPluginSettings
@@ -51,7 +52,7 @@ class NamingPanel(private val project: Project) {
                 icon = AllIcons.Actions.Copy
                 append(value)
                 ipad = JBUI.insets(5, 10) // 增加内边距
-                toolTipText = "点击复制: $value"
+                toolTipText = "点击插入到当前光标: $value"
             }
         }
         
@@ -110,7 +111,7 @@ class NamingPanel(private val project: Project) {
             }.resizableRow()
 
             row {
-                comment("💡 点击列表项即可复制到剪贴板")
+                comment("点击结果即可插入当前光标；若没有可用编辑器，则复制到剪贴板")
                 
                 // 添加设置链接
                 link("设置") {
@@ -130,8 +131,16 @@ class NamingPanel(private val project: Project) {
                 val index = resultList.locationToIndex(e.point)
                 if (index >= 0) {
                     val selected = resultModel.getElementAt(index)
-                    copyToClipboard(selected)
-                    showCopiedHint(e, selected)
+                    val inserted = EditorTextInserter.selectedEditor(project)?.let { editor ->
+                        EditorTextInserter.insert(project, editor, selected)
+                        true
+                    } ?: false
+
+                    if (!inserted) {
+                        copyToClipboard(selected)
+                    }
+
+                    showResultHint(e, selected, inserted)
                     resultList.clearSelection()
                 }
             }
@@ -174,9 +183,10 @@ class NamingPanel(private val project: Project) {
         clipboard.setContents(stringSelection, null)
     }
     
-    private fun showCopiedHint(e: MouseEvent, text: String) {
+    private fun showResultHint(e: MouseEvent, text: String, inserted: Boolean) {
+        val message = if (inserted) "已插入: $text" else "已复制: $text"
         JBPopupFactory.getInstance()
-            .createHtmlTextBalloonBuilder("已复制: $text", com.intellij.openapi.ui.MessageType.INFO, null)
+            .createHtmlTextBalloonBuilder(message, com.intellij.openapi.ui.MessageType.INFO, null)
             .setFadeoutTime(2000)
             .createBalloon()
             .show(RelativePoint(e.component, e.point), Balloon.Position.above)

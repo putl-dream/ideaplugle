@@ -2,10 +2,8 @@ package putl.ideaplugle.ai
 
 import putl.ideaplugle.naming.NamingFormat
 import putl.ideaplugle.settings.NamingPluginSettings
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
-import com.intellij.openapi.progress.ProgressIndicator
-import com.intellij.openapi.progress.ProgressManager
-import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -57,28 +55,25 @@ class NamingAIService(private val project: Project) {
             stream = false
         )
 
-        ProgressManager.getInstance().run(object : Task.Backgroundable(project, "正在生成变量名...", true) {
-            override fun run(indicator: ProgressIndicator) {
-                try {
-                    val requestBody = json.encodeToString(request)
-                    val responseBody = sendHttpRequest(settings.pluginState.apiUrl, apiKey, requestBody)
-                    val response = json.decodeFromString<ChatResponse>(responseBody)
+        ApplicationManager.getApplication().executeOnPooledThread {
+            try {
+                val requestBody = json.encodeToString(request)
+                val responseBody = sendHttpRequest(settings.pluginState.apiUrl, apiKey, requestBody)
+                val response = json.decodeFromString<ChatResponse>(responseBody)
 
-                    val names = response.choices?.firstOrNull()?.message?.content
-                        ?.parseNamesFromResponse()
-                        ?: emptyList()
+                val names = response.choices?.firstOrNull()?.message?.content
+                    ?.parseNamesFromResponse()
+                    ?: emptyList()
 
-                    // 在EDT线程中更新UI
-                    com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
-                        onResult(names)
-                    }
-                } catch (e: Exception) {
-                    com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
-                        onError("生成失败: ${e.message}")
-                    }
+                ApplicationManager.getApplication().invokeLater {
+                    onResult(names)
+                }
+            } catch (e: Exception) {
+                ApplicationManager.getApplication().invokeLater {
+                    onError("生成失败: ${e.message}")
                 }
             }
-        })
+        }
     }
 
     private fun sendHttpRequest(urlString: String, apiKey: String, requestBody: String): String {
@@ -118,29 +113,43 @@ class NamingAIService(private val project: Project) {
 
     private fun buildPrompt(format: NamingFormat): String {
         return """
-            你是一个专业的变量命名助手。请根据用户的描述，生成5个合适的变量名。
+            你是一个专业的英文代码命名助手。请根据用户的中文描述，生成 5 个合适的英文命名候选。
 
             命名格式要求：${format.displayName}（${format.description}）
 
             要求：
-            1. 变量名要简洁、语义清晰
-            2. 遵循${format.displayName}命名规范
-            3. 使用英文单词
-            4. 直接返回变量名列表，每行一个，不要添加序号或其他说明文字
-            5. 不要包含代码块标记
+            1. 第一行必须给出最推荐、最适合直接插入代码的结果
+            2. 命名要简洁、语义清晰
+            3. 只输出英文命名结果，不要输出中文解释
+            4. 严格遵循${format.displayName}命名规范
+            5. 每行仅输出一个结果，不要加序号、项目符号、代码块或额外说明
+            6. 优先使用开发中常见、自然的英文表达
 
-            示例输出格式：
-            variableName1
-            variableName2
-            variableName3
+            示例输出：
+            userLoginStatus
+            currentUserStatus
+            loginState
         """.trimIndent()
     }
 
     private fun String.parseNamesFromResponse(): List<String> {
-        return this.lines()
+        return lineSequence()
+            .filter { !it.contains("```") }
+            .flatMap { line -> line.split(',', '，').asSequence() }
+            .map { it.trim().trim('`') }
+            .map { it.replace(NUMBER_PREFIX_REGEX, "") }
+            .map { it.replace(BULLET_PREFIX_REGEX, "") }
             .map { it.trim() }
-            .filter { it.isNotEmpty() && !it.startsWith("```") }
+            .filter { it.isNotEmpty() && NAME_REGEX.matches(it) }
+            .distinct()
             .take(5)
+            .toList()
+    }
+
+    companion object {
+        private val NUMBER_PREFIX_REGEX = Regex("""^\d+[\.\)\]、\s-]+""")
+        private val BULLET_PREFIX_REGEX = Regex("""^[-*•]+\s*""")
+        private val NAME_REGEX = Regex("""[A-Za-z_][A-Za-z0-9._-]*""")
     }
 }
 

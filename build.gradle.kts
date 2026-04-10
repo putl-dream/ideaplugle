@@ -21,15 +21,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     intellijPlatform {
-        intellijIdea("2025.2.4")
+        intellijIdeaCommunity("2025.2.4")
         testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
-
-        // Add plugin dependencies for compilation here:
-
-
-        // bundledPlugin("org.jetbrains.kotlin")
-        bundledPlugin("com.intellij.modules.json")
-        bundledPlugin("org.jetbrains.plugins.yaml")
     }
 }
 
