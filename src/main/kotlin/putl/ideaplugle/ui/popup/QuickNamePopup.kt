@@ -45,7 +45,8 @@ import javax.swing.event.DocumentListener
  */
 class QuickNamePopup(
     private val project: Project,
-    private val fallbackEditor: Editor
+    private val fallbackEditor: Editor,
+    private val codeContext: String? = null
 ) {
 
     private val settings = NamingPluginSettings.getInstance(project)
@@ -293,6 +294,7 @@ class QuickNamePopup(
         aiService.generateNames(
             description = query,
             format = currentFormat,
+            codeContext = codeContext,
             onResult = { names ->
                 if (closed || currentToken != requestToken) {
                     return@generateNames

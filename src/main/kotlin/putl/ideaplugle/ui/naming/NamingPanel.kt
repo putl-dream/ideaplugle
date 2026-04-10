@@ -3,6 +3,7 @@ package putl.ideaplugle.ui.naming
 import putl.ideaplugle.ai.NamingAIService
 import putl.ideaplugle.editor.EditorTextInserter
 import putl.ideaplugle.naming.NamingFormat
+import putl.ideaplugle.psi.JavaNamingContextExtractor
 import putl.ideaplugle.settings.NamingPluginConfigurable
 import putl.ideaplugle.settings.NamingPluginSettings
 import com.intellij.icons.AllIcons
@@ -160,6 +161,9 @@ class NamingPanel(private val project: Project) {
         aiService.generateNames(
             description = description,
             format = selectedFormat,
+            codeContext = EditorTextInserter.selectedEditor(project)?.let { editor ->
+                JavaNamingContextExtractor.describe(project, editor)
+            },
             onResult = { names ->
                 resultModel.clear()
                 if (names.isEmpty()) {

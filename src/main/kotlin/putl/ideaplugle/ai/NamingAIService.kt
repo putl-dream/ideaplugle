@@ -29,6 +29,7 @@ class NamingAIService(private val project: Project) {
     fun generateNames(
         description: String,
         format: NamingFormat,
+        codeContext: String? = null,
         onResult: (List<String>) -> Unit,
         onError: (String) -> Unit
     ) {
@@ -45,11 +46,11 @@ class NamingAIService(private val project: Project) {
             messages = listOf(
                 Message(
                     role = "system",
-                    content = buildPrompt(format)
+                    content = buildSystemPrompt(format)
                 ),
                 Message(
                     role = "user",
-                    content = description
+                    content = buildUserPrompt(description, codeContext)
                 )
             ),
             stream = false
@@ -111,9 +112,9 @@ class NamingAIService(private val project: Project) {
         }
     }
 
-    private fun buildPrompt(format: NamingFormat): String {
+    private fun buildSystemPrompt(format: NamingFormat): String {
         return """
-            你是一个专业的英文代码命名助手。请根据用户的中文描述，生成 5 个合适的英文命名候选。
+            你是一个资深的 Java 架构师。请根据用户的中文描述和当前代码上下文，生成 5 个合适的英文代码命名。
 
             命名格式要求：${format.displayName}（${format.description}）
 
@@ -123,12 +124,31 @@ class NamingAIService(private val project: Project) {
             3. 只输出英文命名结果，不要输出中文解释
             4. 严格遵循${format.displayName}命名规范
             5. 每行仅输出一个结果，不要加序号、项目符号、代码块或额外说明
-            6. 优先使用开发中常见、自然的英文表达
+            6. 优先结合类职责、方法语义和变量类型做命名
+            7. 优先使用开发中常见、自然的英文表达
 
             示例输出：
             userLoginStatus
             currentUserStatus
             loginState
+        """.trimIndent()
+    }
+
+    private fun buildUserPrompt(description: String, codeContext: String?): String {
+        val contextBlock = codeContext ?: """
+            - 所在类名: 未识别
+            - 所在方法: 未识别
+            - 正在定义的变量类型: 未识别
+        """.trimIndent()
+
+        return """
+            [系统提供的当前代码上下文]
+            $contextBlock
+
+            [用户输入的描述]
+            $description
+
+            请根据上下文，生成符合规范的名称。
         """.trimIndent()
     }
 

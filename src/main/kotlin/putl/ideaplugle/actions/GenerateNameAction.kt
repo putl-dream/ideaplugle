@@ -1,6 +1,7 @@
 package putl.ideaplugle.actions
 
 import putl.ideaplugle.editor.EditorTextInserter
+import putl.ideaplugle.psi.JavaNamingContextExtractor
 import putl.ideaplugle.ui.popup.QuickNamePopup
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
@@ -23,6 +24,7 @@ class GenerateNameAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val editor = e.getData(CommonDataKeys.EDITOR) ?: EditorTextInserter.selectedEditor(project) ?: return
-        QuickNamePopup(project, editor).show()
+        val codeContext = JavaNamingContextExtractor.describe(project, editor)
+        QuickNamePopup(project, editor, codeContext).show()
     }
 }
