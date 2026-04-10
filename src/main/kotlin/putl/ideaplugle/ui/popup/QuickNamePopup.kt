@@ -451,7 +451,7 @@ class QuickNamePopup(
         private val META_COLOR = JBColor(0x99A0A8, 0x5E6672)
         private val ERROR_COLOR = JBColor(0xC42430, 0xFF6B68)
         private val SELECTED_ROW_COLOR = JBColor(0x5D82C5, 0x4468A8)
-        private val TEXT_COLOR = JBColor(0x3A4350, 0xD6DCE5)
+        private val TEXT_COLOR = JBColor(0x3A4350, 0x9BA3B0)
         private val SELECTED_TEXT_COLOR = JBColor(0xFFFFFF, 0xFFFFFF)
         private val COLLAPSED_SIZE: Dimension
             get() = JBUI.size(448, 118)
@@ -461,7 +461,7 @@ class QuickNamePopup(
 
     private class CandidateCellRenderer : JPanel(BorderLayout()), ListCellRenderer<String> {
         private val textLabel = JLabel().apply {
-            border = JBUI.Borders.empty(8, 16)
+            border = JBUI.Borders.empty(8, 36, 8, 16) // 把这里的 16 改成 32 或 36 试试
             font = font.deriveFont(Font.PLAIN, font.size2D + 1f)
         }
 
